@@ -11,8 +11,8 @@
 1. 環境変数の設定
 
     ```
-    $ export PJ_ROOT="${HOME}/core"
-    $ cd ${PJ_ROOT};pwd
+    $ export CORE_ROOT="${HOME}/core"
+    $ cd ${CORE_ROOT};pwd
     ```
 
     - 実行結果（例）
@@ -21,15 +21,15 @@
         /home/fiware/core
         ```
 
-1. 環境変数の設定
+1. 環境設定の読み込み
 
     ```
-    $ source ${PJ_ROOT}/docs/minikube/env
+    $ source ${CORE_ROOT}/docs/minikube/env
     ```
 
-## Azureのログイン
+## Azureへのログイン
 
-1. Azureのログイン
+1. Azureへのログイン
 
     ```
     $ az login --tenant ${TENANT}
@@ -62,7 +62,7 @@
 1. 前提ファイルのインストール
 
     ```
-    $ sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
+    $ sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
     ```
 
 1. docker-ceリポジトリの公開鍵を登録
@@ -80,13 +80,13 @@
 1. パッケージリストの更新
 
     ```
-    $ sudo apt-get -y update
+    $ sudo apt-get update -y
     ```
 
 1. docker-ceのインストール
 
     ```
-    $ sudo apt-get -y install docker-ce
+    $ sudo apt-get install -y docker-ce
     ```
 
 1. docker-ceのインストール確認
@@ -154,7 +154,7 @@
 1. dockerコンテナ起動用コマンドの作成
 
     ```
-    $ echo "docker run -it -v ${PJ_ROOT}/secrets:/etc/letsencrypt certbot/certbot certonly --manual --domain *.${DOMAIN} --email ${EMAIL} --no-eff-email --agree-tos --manual-public-ip-logging-ok --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory"
+    $ echo "docker run -it -v ${CORE_ROOT}/secrets:/etc/letsencrypt certbot/certbot certonly --manual --domain *.${DOMAIN} --email ${EMAIL} --no-eff-email --agree-tos --manual-public-ip-logging-ok --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory"
     ```
 
 1. Let's encryptを用いてTLS証明書の作成を開始
@@ -202,11 +202,11 @@
         {
         "etag": "d98d80f3-4b01-4c90-b7f8-dad545074c3d",
         "fqdn": "_acme-challenge.fiware-test.work.",
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-dns/providers/Microsoft.Network/dnszones/fiware-test.work/TXT/_acme-challenge",
+        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/dns-zone/providers/Microsoft.Network/dnszones/fiware-test.work/TXT/_acme-challenge",
         "metadata": null,
         "name": "_acme-challenge",
         "provisioningState": "Succeeded",
-        "resourceGroup": "abel-dns",
+        "resourceGroup": "dns-zone",
         "targetResource": {
             "id": null
         },
@@ -304,10 +304,10 @@
 
 ## AKSにRabbitMQクラスターの作成
 
-1. secretsに証明書ファイルの登録 
+1. secretsに証明書ファイルを登録 
 
     ```
-    $ kubectl create secret generic rabbitmq-certifications --from-file=${PJ_ROOT}/secrets/live/${DOMAIN}/fullchain.pem --from-file=${PJ_ROOT}/secrets/live/${DOMAIN}/cert.pem --from-file=${PJ_ROOT}/secrets/live/${DOMAIN}/privkey.pem
+    $ kubectl create secret generic rabbitmq-certifications --from-file=${CORE_ROOT}/secrets/live/${DOMAIN}/fullchain.pem --from-file=${CORE_ROOT}/secrets/live/${DOMAIN}/cert.pem --from-file=${CORE_ROOT}/secrets/live/${DOMAIN}/privkey.pem
     ```
 
     - 実行結果（例）
@@ -410,7 +410,7 @@
         Changing password for user "guest" ...
         ```
 
-## RabbitMQのユーザ設定
+## RabbitMQのユーザ登録
 
 1. RabbitMQのユーザ登録
 
@@ -480,23 +480,23 @@
 
         ```
         {
-        "arecords": [
-            {
-            "ipv4Address": "23.102.75.46"
-            }
-        ],
-        "etag": "bdba0c2a-9c39-4e09-9cda-70abd603e5a3",
-        "fqdn": "mqtt.fiware-test.work.",
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-dns/providers/Microsoft.Network/dnszones/fiware-test.work/A/mqtt",
-        "metadata": null,
-        "name": "mqtt",
-        "provisioningState": "Succeeded",
-        "resourceGroup": "abel-dns",
-        "targetResource": {
-            "id": null
-        },
-        "ttl": 3600,
-        "type": "Microsoft.Network/dnszones/A"
+            "arecords": [
+                {
+                "ipv4Address": "23.102.75.46"
+                }
+            ],
+            "etag": "bdba0c2a-9c39-4e09-9cda-70abd603e5a3",
+            "fqdn": "mqtt.fiware-test.work.",
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/dns-zone/providers/Microsoft.Network/dnszones/fiware-test.work/A/mqtt",
+            "metadata": null,
+            "name": "mqtt",
+            "provisioningState": "Succeeded",
+            "resourceGroup": "dns-zone",
+            "targetResource": {
+                "id": null
+            },
+            "ttl": 3600,
+            "type": "Microsoft.Network/dnszones/A"
         }
         ```
 
@@ -526,7 +526,7 @@
 1. パッケージリストの更新
 
     ```
-    $ sudo apt-get -y update
+    $ sudo apt-get update -y
     ```
 
 1. mosquitto_pubのインストール
@@ -544,7 +544,7 @@
 1. mqttの疎通確認
 
     ```
-    $ mosquitto_pub -h mqtt.${DOMAIN} -p 8883 --cafile ${PJ_ROOT}/secrets/DST_Root_CA_X3.pem -d -u iotagent -P ${MQTT__iotagent} -t /test -m "test"
+    $ mosquitto_pub -h mqtt.${DOMAIN} -p 8883 --cafile ${CORE_ROOT}/secrets/DST_Root_CA_X3.pem -d -u iotagent -P ${MQTT__iotagent} -t /test -m "test"
     ```
 
     - 実行結果（例）
@@ -698,7 +698,7 @@
 1. AKSにsecret/ambassador-certsの登録
 
     ```
-    $ kubectl create secret tls ambassador-certs --cert=${PJ_ROOT}/secrets/live/${DOMAIN}/fullchain.pem --key=${PJ_ROOT}/secrets/live/${DOMAIN}/privkey.pem
+    $ kubectl create secret tls ambassador-certs --cert=${CORE_ROOT}/secrets/live/${DOMAIN}/fullchain.pem --key=${CORE_ROOT}/secrets/live/${DOMAIN}/privkey.pem
     ```
 
     - 実行結果（例）
@@ -782,23 +782,23 @@
 
         ```
         {
-        "arecords": [
-            {
-            "ipv4Address": "104.41.182.148"
-            }
-        ],
-        "etag": "5dc14258-3d1e-454a-924c-973e691342f6",
-        "fqdn": "api.fiware-test.work.",
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-dns/providers/Microsoft.Network/dnszones/fiware-test.work/A/api",
-        "metadata": null,
-        "name": "api",
-        "provisioningState": "Succeeded",
-        "resourceGroup": "abel-dns",
-        "targetResource": {
-            "id": null
-        },
-        "ttl": 3600,
-        "type": "Microsoft.Network/dnszones/A"
+            "arecords": [
+                {
+                    "ipv4Address": "104.41.182.148"
+                }
+            ],
+            "etag": "5dc14258-3d1e-454a-924c-973e691342f6",
+            "fqdn": "api.fiware-test.work.",
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/dns-zone/providers/Microsoft.Network/dnszones/fiware-test.work/A/api",
+            "metadata": null,
+            "name": "api",
+            "provisioningState": "Succeeded",
+            "resourceGroup": "dns-zone",
+            "targetResource": {
+                "id": null
+            },
+            "ttl": 3600,
+            "type": "Microsoft.Network/dnszones/A"
         }
         ```
 
@@ -874,7 +874,7 @@
     __EOS__
     ```
 
-1. AKSにsecrets/auth-tokens.jsonの登録
+1. AKSにsecrets/auth-tokens.jsonを登録
 
     ```
     $ kubectl create secret generic auth-tokens --from-file=./secrets/auth-tokens.json
@@ -886,7 +886,7 @@
         secret/auth-tokens created
         ```
 
-1. AKSにauth/auth-serviceのインストール
+1. AKSにauth-serviceのインストール
 
     ```
     $ kubectl apply -f auth/auth-service.yaml
@@ -898,7 +898,7 @@
         service/auth created
         ```
 
-1. AKSにauth/auth-deploymentのインストール
+1. AKSにauth-deploymentのインストール
 
     ```
     $ kubectl apply -f auth/auth-deployment.yaml
@@ -941,7 +941,7 @@
 
 ## AKSにfiware orionの設定
 
-1. AKSにorion/orion-serviceのインストール
+1. AKSにorion-serviceのインストール
 
     ```
     $ kubectl apply -f orion/orion-service.yaml
@@ -953,7 +953,7 @@
         service/orion created
         ```
 
-1. AKSにorion/orion-deploymentのインストール
+1. AKSにorion-deploymentのインストール
 
     ```
     $ kubectl apply -f orion/orion-deployment.yaml
@@ -993,7 +993,7 @@
         orion   ClusterIP   10.0.113.89   <none>        1026/TCP   3m32s
         ```
 
-1. orinoの接続確認
+1. orionの接続確認
 
     ```
     $ curl -i https://api.${DOMAIN}/orion/v2/entities/
@@ -1014,7 +1014,7 @@
 1. 認証トークンの環境設定
 
     ```
-    $ TOKEN=$(cat ${PJ_ROOT}/secrets/auth-tokens.json | jq '.[0].settings.bearer_tokens[0].token' -r)
+    $ TOKEN=$(cat ${CORE_ROOT}/secrets/auth-tokens.json | jq '.[0].settings.bearer_tokens[0].token' -r)
     ```
 
 1. orionの認証確認
@@ -1072,7 +1072,7 @@
         service/iotagent-ul created
         ```
 
-1. AKSにidas/iotagent-ul-deploymentのインストール
+1. AKSにiotagent-ul-deploymentのインストール
 
     ```
     $ kubectl apply -f idas/iotagent-ul-deployment.yaml
@@ -1115,7 +1115,7 @@
 1. idasにsecrets/auth-tokensを利用した接続確認
 
     ```
-    $ TOKEN=$(cat ${PJ_ROOT}/secrets/auth-tokens.json | jq '.[0].settings.bearer_tokens[0].token' -r)
+    $ TOKEN=$(cat ${CORE_ROOT}/secrets/auth-tokens.json | jq '.[0].settings.bearer_tokens[0].token' -r)
     $ curl -i -H "Authorization: bearer ${TOKEN}" -H "Fiware-Service: test" -H "Fiware-Servicepath: /*" https://api.${DOMAIN}/idas/ul20/manage/iot/services/
     ```
 

@@ -16,7 +16,7 @@
 1. gitのインストール
 
     ```
-    $ sudo apt-get -y install git
+    $ sudo apt-get install -y git
     ```
 
 1. gitのインストール確認
@@ -41,8 +41,8 @@
 1. 環境変数の設定
 
     ```
-    $ export PJ_ROOT=$HOME/core
-    $ cd $PJ_ROOT;pwd
+    $ export CORE_ROOT=$HOME/core
+    $ cd $CORE_ROOT;pwd
     ```
 
     - 実行結果（例）
@@ -54,20 +54,20 @@
 1. 環境ファイルのコピー
 
     ```
-    $ cd $PJ_ROOT/docs/minikube
+    $ cd $CORE_ROOT/docs/minikube
     $ cp env.template env
     ```
 
 1. プロジェクトルートに移動
 
     ```
-    $ cd $PJ_ROOT
+    $ cd $CORE_ROOT
     ```
 
-1. 環境ファイルの実行
+1. 環境設定の読み込み
 
     ```
-    $ source $PJ_ROOT/docs/minikube/env
+    $ source $CORE_ROOT/docs/minikube/env
     ```
 
 1. VirtualBoxのインストール
@@ -224,7 +224,7 @@
 
     ```
     $ export HOST_IPADDR=$(ifconfig ${NWNAME}  | awk '/inet / {print $2}' | cut -d: -f2)
-    $ sed -i -e "s/<<HOST_IPADDR>>/${HOST_IPADDR}/" ${PJ_ROOT}/docs/minikube/env
+    $ sed -i -e "s/<<HOST_IPADDR>>/${HOST_IPADDR}/" ${CORE_ROOT}/docs/minikube/env
     $ echo ${HOST_IPADDR}
     ```
 
@@ -268,7 +268,7 @@
                     "Env": null,
                     "Ipv6": false,
                     "InsecureRegistry": [
-        +                "192.168.99.1/24",
+        +               "192.168.99.1/24",
                         "10.96.0.0/12"
                     ],
                     "Labels": null,
@@ -325,7 +325,7 @@
 1. 前提ファイルのインストール
 
     ```
-    $ sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
+    $ sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
     ```
 
 1. docker-ceリポジトリの公開鍵を登録
@@ -487,7 +487,7 @@
 
     ```
     $ export REPOSITORY=${HOST_IPADDR}:5000
-    $ sed -i -e "s/<<REPOSITORY>>/${REPOSITORY}/" ${PJ_ROOT}/docs/minikube/env
+    $ sed -i -e "s/<<REPOSITORY>>/${REPOSITORY}/" ${CORE_ROOT}/docs/minikube/env
     $ echo ${REPOSITORY}
     ```
 

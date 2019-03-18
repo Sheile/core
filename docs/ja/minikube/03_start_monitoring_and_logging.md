@@ -5,8 +5,8 @@
 1. 環境変数の設定
 
     ```
-    $ export PJ_ROOT="${HOME}/core"
-    $ cd ${PJ_ROOT};pwd
+    $ export CORE_ROOT="${HOME}/core"
+    $ cd ${CORE_ROOT};pwd
     ```
 
     - 実行結果（例）
@@ -15,10 +15,10 @@
         /home/fiware/core
         ```
 
-1. 環境変数の設定
+1. 環境設定の読み込み
 
     ```
-    $ source ${PJ_ROOT}/docs/minikube/env
+    $ source ${CORE_ROOT}/docs/minikube/env
     ```
 
 ## elasticsearchのfiware cygnas設定

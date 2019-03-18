@@ -8,8 +8,8 @@
 1. 環境変数の設定
 
     ```
-    $ export PJ_ROOT="${HOME}/core"
-    $ cd ${PJ_ROOT};pwd
+    $ export CORE_ROOT="${HOME}/core"
+    $ cd ${CORE_ROOT};pwd
     ```
 
     - 実行結果（例）
@@ -18,10 +18,10 @@
         /home/fiware/core
         ```
 
-1. 環境変数の設定
+1. 環境設定の読み込み
 
     ```
-    $ source ${PJ_ROOT}/docs/minikube/env
+    $ source ${CORE_ROOT}/docs/minikube/env
     ```
 
 
@@ -122,7 +122,7 @@
         ```
 
 
-## RabbitMQのユーザ設定
+## RabbitMQのユーザ登録
 
 1. RabbitMQのユーザ登録
 
@@ -464,7 +464,7 @@
         secret/auth-tokens created
         ```
 
-1. minikubeにauth/auth-serviceのインストール
+1. minikubeにauth-serviceのインストール
 
     ```
     $ kubectl apply -f auth/auth-service.yaml
@@ -476,7 +476,7 @@
         service/auth created
         ```
 
-1. minikubeにauth/auth-deploymentのインストール
+1. minikubeにauth-deploymentのインストール
 
     ```
     $ kubectl apply -f auth/auth-deployment.yaml
@@ -614,7 +614,7 @@
 
 ## minikubeにfiware orionの設定
 
-1. minikubeにorion/orion-minikube-serviceのインストール
+1. minikubeにorion-minikube-serviceのインストール
 
     ```
     $ kubectl apply -f orion/orion-minikube-service.yaml
@@ -626,7 +626,7 @@
         service/orion created
         ```
 
-1. minikubeにorion/orion-deploymentのインストール
+1. minikubeにorion-deploymentのインストール
 
     ```
     $ kubectl apply -f orion/orion-deployment.yaml
@@ -707,7 +707,7 @@
 1. secrets/auth-tokensを利用したorion接続確認
 
     ```
-    $ TOKEN=$(cat ${PJ_ROOT}/secrets/auth-tokens.json | jq '.[0].settings.bearer_tokens[0].token' -r)
+    $ TOKEN=$(cat ${CORE_ROOT}/secrets/auth-tokens.json | jq '.[0].settings.bearer_tokens[0].token' -r)
     $ curl -i -H "Authorization: bearer ${TOKEN}" http://${HOST_IPADDR}:8080/orion/v2/entities/
     ```
 
@@ -801,7 +801,7 @@
 1. idasにsecrets/auth-tokensを利用した接続確認
 
     ```
-    $ TOKEN=$(cat ${PJ_ROOT}/secrets/auth-tokens.json | jq '.[0].settings.bearer_tokens[0].token' -r)
+    $ TOKEN=$(cat ${CORE_ROOT}/secrets/auth-tokens.json | jq '.[0].settings.bearer_tokens[0].token' -r)
     $ curl -i -H "Authorization: bearer ${TOKEN}" -H "Fiware-Service: test" -H "Fiware-Servicepath: /*" http://${HOST_IPADDR}:8080/idas/ul20/manage/iot/services/
     ```
 

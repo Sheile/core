@@ -5,16 +5,16 @@
 1. RoboticBase/coreのclone先を、プロジェクトのルートディレクトリに設定
 
     ```
-    $ export PJ_ROOT=${HOME}/core
+    $ export CORE_ROOT=${HOME}/core
     ```
 
-1. 環境ファイルの実行
+1. 環境設定の読み込み
 
     ```
-    $ source ${PJ_ROOT}/docs/azure_aks/env
+    $ source ${CORE_ROOT}/docs/azure_aks/env
     ```
 
-## elasticsearchでfiware cygnusを起動
+## cygnus-elasticsearchを起動
 
 1. cygnus-elasticsearch-serviceのインストール
 
@@ -385,7 +385,7 @@
       prometheus-kp-prometheus-db-prometheus-kp-prometheus-0   Bound    pvc-ca7da88f-35af-11e9-a6d0-3eb5d27c5279   30Gi       RWO            managed-premium   16m
       ```
 
-## kube-prometheus-exporter-kubeletsのパッチを適用
+## kube-prometheus-exporter-kubeletsにパッチを適用
 
 1. 接続方式をHTTPSからHTTPに切り替える
 

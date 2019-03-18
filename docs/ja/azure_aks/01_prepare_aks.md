@@ -17,10 +17,10 @@
 1. 前提条件のパッケージをインストール
 
     ```
-    $ sudo apt-get install apt-transport-https lsb-release software-properties-common dirmngr -y
+    $ sudo apt-get install -y apt-transport-https lsb-release software-properties-common dirmngr
     ```
 
-2. Azure CLI用のリポジトリを追加
+1. Azure CLI用のリポジトリを追加
 
     ```
     $ AZ_REPO=$(lsb_release -cs)
@@ -36,7 +36,7 @@
 1. パッケージリスト更新
 
     ```
-    $ sudo apt-get -y update
+    $ sudo apt-get update -y
     ```
 
 1. Azure CLIのインストール
@@ -69,7 +69,7 @@
 1. gitのインストール
 
     ```
-    $ sudo apt-get -y install git
+    $ sudo apt-get install -y git
     ```
 
 1. gitのインストール確認
@@ -94,8 +94,8 @@
 1. 環境変数の設定
 
     ```
-    $ export PJ_ROOT=$HOME/core
-    $ cd $PJ_ROOT;pwd
+    $ export CORE_ROOT=$HOME/core
+    $ cd $CORE_ROOT;pwd
     ```
 
     - 実行結果（例）
@@ -107,7 +107,7 @@
 1. 環境ファイルのコピー
 
     ```
-    $ cd $PJ_ROOT/docs/azure_aks
+    $ cd $CORE_ROOT/docs/azure_aks
     $ cp env.template env
     ```
 
@@ -139,19 +139,19 @@
 1. プロジェクトルートに移動
 
     ```
-    $ cd $PJ_ROOT
+    $ cd $CORE_ROOT
     ```
 
-1. 環境ファイルの実行
+1. 環境設定の読み込み
 
     ```
-    $ source $PJ_ROOT/docs/azure_aks/env
+    $ source $CORE_ROOT/docs/azure_aks/env
     ```
 
 
 ## AKSのログイン
 
-1. テナントIDを指定したAKSのログイン
+1. テナントIDを指定してAKSへログイン
 
     ```
     $ az login --tenant ${TENANT}
@@ -163,7 +163,7 @@
     To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code GUYE26E84 to authenticate.
     ```
 
-    ※その後、対象のアカウントを選択し、一定時間経過後、ターミナル側に下記のID一覧が表示されます
+    ※その後、対象のアカウントを選択、一定時間経過後、ターミナル側に下記のID一覧が表示されます
 
     ```
     [
@@ -192,16 +192,16 @@
 
         ```
         {
-        "environmentName": "AzureCloud",
-        "id": "38ac45e2-5c75-438f-9498-b1a854b2a535",
-        "isDefault": true,
-        "name": "Microsoft Azure",
-        "state": "Enabled",
-        "tenantId": "tisstc01.onmicrosoft.com",
-        "user": {
-            "name": "matsui0000@yahoo.co.jp",
-            "type": "user"
-        }
+            "environmentName": "AzureCloud",
+            "id": "38ac45e2-5c75-438f-9498-b1a854b2a535",
+            "isDefault": true,
+            "name": "Microsoft Azure",
+            "state": "Enabled",
+            "tenantId": "tisstc01.onmicrosoft.com",
+            "user": {
+                "name": "matsui0000@yahoo.co.jp",
+                "type": "user"
+            }
         }
         ```
 
@@ -211,10 +211,10 @@
 1. jqのインストール
 
     ```
-    $ sudo apt-get -y install jq
+    $ sudo apt-get install -y jq
     ```
 
-1. DNSのリソースグループ作成
+1. DNS用のリソースグループを作成
 
     ```
     $ az group create --name ${DNS_ZONE_RG} --location ${REGION}
@@ -224,15 +224,15 @@
 
         ```
         {
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-dns",
-        "location": "japaneast",
-        "managedBy": null,
-        "name": "abel-dns",
-        "properties": {
-            "provisioningState": "Succeeded"
-        },
-        "tags": null,
-        "type": null
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/dns-zone",
+            "location": "japaneast",
+            "managedBy": null,
+            "name": "dns-zone",
+            "properties": {
+                "provisioningState": "Succeeded"
+            },
+            "tags": null,
+            "type": null
         }
         ```
 
@@ -247,24 +247,24 @@
         ```
         az network dns zone create --resource-group ${DNS_ZONE_RG} --name "${DOMAIN}"
         {
-        "etag": "00000002-0000-0000-fc9e-1d270fc8d401",
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-dns/providers/Microsoft.Network/dnszones/fiware-test.work",
-        "location": "global",
-        "maxNumberOfRecordSets": 5000,
-        "name": "fiware-test.work",
-        "nameServers": [
-            "ns1-06.azure-dns.com.",
-            "ns2-06.azure-dns.net.",
-            "ns3-06.azure-dns.org.",
-            "ns4-06.azure-dns.info."
-        ],
-        "numberOfRecordSets": 2,
-        "registrationVirtualNetworks": null,
-        "resolutionVirtualNetworks": null,
-        "resourceGroup": "abel-dns",
-        "tags": {},
-        "type": "Microsoft.Network/dnszones",
-        "zoneType": "Public"
+            "etag": "00000002-0000-0000-fc9e-1d270fc8d401",
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/dns-zone/providers/Microsoft.Network/dnszones/fiware-test.work",
+            "location": "global",
+            "maxNumberOfRecordSets": 5000,
+            "name": "fiware-test.work",
+            "nameServers": [
+                "ns1-06.azure-dns.com.",
+                "ns2-06.azure-dns.net.",
+                "ns3-06.azure-dns.org.",
+                "ns4-06.azure-dns.info."
+            ],
+            "numberOfRecordSets": 2,
+            "registrationVirtualNetworks": null,
+            "resolutionVirtualNetworks": null,
+            "resourceGroup": "dns-zone",
+            "tags": {},
+            "type": "Microsoft.Network/dnszones",
+            "zoneType": "Public"
         }
         ```
 
@@ -278,17 +278,17 @@
 
         ```
         [
-        "ns1-08.azure-dns.com.",
-        "ns2-08.azure-dns.net.",
-        "ns3-08.azure-dns.org.",
-        "ns4-08.azure-dns.info."
+            "ns1-08.azure-dns.com.",
+            "ns2-08.azure-dns.net.",
+            "ns3-08.azure-dns.org.",
+            "ns4-08.azure-dns.info."
         ]
         ```
 
 
-## AKSリソースグループの作成
+## AKS用のリソースグループを作成
 
-1. AKSリソースグループの作成
+1. AKS用のリソースグループを作成
 
     ```
     $ az group create --name ${AKS_RG} --location ${REGION}
@@ -298,15 +298,15 @@
 
         ```
         {
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-aks",
-        "location": "japaneast",
-        "managedBy": null,
-        "name": "abel-aks",
-        "properties": {
-            "provisioningState": "Succeeded"
-        },
-        "tags": null,
-        "type": null
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/rbcore",
+            "location": "japaneast",
+            "managedBy": null,
+            "name": "rbcore",
+            "properties": {
+                "provisioningState": "Succeeded"
+            },
+            "tags": null,
+            "type": null
         }
         ```
 
@@ -322,23 +322,23 @@
 
         ```
         {
-        "adminUserEnabled": false,
-        "creationDate": "2019-02-14T01:07:34.738571+00:00",
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-aks/providers/Microsoft.ContainerRegistry/registries/abelacr",
-        "location": "japaneast",
-        "loginServer": "abelacr.azurecr.io",
-        "name": "abelacr",
-        "networkRuleSet": null,
-        "provisioningState": "Succeeded",
-        "resourceGroup": "abel-aks",
-        "sku": {
-            "name": "Basic",
-            "tier": "Basic"
-        },
-        "status": null,
-        "storageAccount": null,
-        "tags": {},
-        "type": "Microsoft.ContainerRegistry/registries"
+            "adminUserEnabled": false,
+            "creationDate": "2019-02-14T01:07:34.738571+00:00",
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/rbcore/providers/Microsoft.ContainerRegistry/registries/rbcacr",
+            "location": "japaneast",
+            "loginServer": "rbcacr.azurecr.io",
+            "name": "rbcacr",
+            "networkRuleSet": null,
+            "provisioningState": "Succeeded",
+            "resourceGroup": "rbcore",
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic"
+            },
+            "status": null,
+            "storageAccount": null,
+            "tags": {},
+            "type": "Microsoft.ContainerRegistry/registries"
         }
         ```
 
@@ -351,7 +351,7 @@
 1. 環境ファイルのREPOSITORY書き換え
 
     ```
-    $ sed -i -e "s/<<REPOSITORY>>/${REPOSITORY}/" ${PJ_ROOT}/docs/azure_aks/env
+    $ sed -i -e "s/<<REPOSITORY>>/${REPOSITORY}/" ${CORE_ROOT}/docs/azure_aks/env
     ```
 
 1. REPOSITORYの環境変数確認
@@ -363,7 +363,7 @@
     - 実行結果（例）
 
         ```
-        abelacr.azurecr.io
+        rbcacr.azurecr.io
         ```
 
 
@@ -469,7 +469,7 @@
 
 ### A. monitoringやloggingを利用しないでAKSを起動
 
-※ az aks createコマンドを実行後、約10～20分待機します  
+※ `az aks create`コマンドを実行後、約10～20分待機します  
 ※ AKSのmonitoring機能やlogging機能を利用有無により、起動方法を選択できます 
 
   ```
@@ -480,54 +480,54 @@
 
         ```
         {
-        "aadProfile": null,
-        "addonProfiles": null,
-        "agentPoolProfiles": [
-            {
-            "count": 3,
-            "maxPods": 110,
-            "name": "nodepool1",
-            "osDiskSizeGb": 30,
-            "osType": "Linux",
-            "storageProfile": "ManagedDisks",
-            "vmSize": "Standard_DS2_v2",
-            "vnetSubnetId": null
-            }
-        ],
-        "dnsPrefix": "abelk8s-abel-aks-38ac45",
-        "enableRbac": true,
-        "fqdn": "abelk8s-abel-aks-38ac45-66347681.hcp.japaneast.azmk8s.io",
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourcegroups/abel-aks/providers/Microsoft.ContainerService/managedClusters/abelk8s",
-        "kubernetesVersion": "1.12.5",
-        "linuxProfile": {
-            "adminUsername": "azureuser",
-            "ssh": {
-            "publicKeys": [
+            "aadProfile": null,
+            "addonProfiles": null,
+            "agentPoolProfiles": [
                 {
-                "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC20Lv1HaPdSaFep05hjo1syhM/1XNIEYsbLi0bM5eOn/BGgZF+1TwMktynf6iERHowwgTGKFMbLDVc4mVpa3EoyyTtjPgcP8CENV8TxezQPqa+xljpgW8CsMmE3xCDWOHtqcRa6DW5pgiz+B/TfT4qUTFoRUWZzw1UfPvpwb59rQX6t7YoUtf4wjfttTDprYDpdABZqm1AYAPfjd2ZprUKxk7Hh8ZXM6mTBSvb+F47QIM+57dNME7/nBaT9TvJGCv8f2uCfArUQ4/FP12+v5C7YIoURGuJQmbUnduycqyGuji5SXcMsTlgXaDLk/Ti8qQxvPdlMPBxnV3c4dQdvGcJ fiware@FIWARE-PC\n"
+                "count": 3,
+                "maxPods": 110,
+                "name": "nodepool1",
+                "osDiskSizeGb": 30,
+                "osType": "Linux",
+                "storageProfile": "ManagedDisks",
+                "vmSize": "Standard_DS2_v2",
+                "vnetSubnetId": null
                 }
-            ]
-            }
-        },
-        "location": "japaneast",
-        "name": "abelk8s",
-        "networkProfile": {
-            "dnsServiceIp": "10.0.0.10",
-            "dockerBridgeCidr": "172.17.0.1/16",
-            "networkPlugin": "kubenet",
-            "networkPolicy": null,
-            "podCidr": "10.244.0.0/16",
-            "serviceCidr": "10.0.0.0/16"
-        },
-        "nodeResourceGroup": "MC_abel-aks_abelk8s_japaneast",
-        "provisioningState": "Succeeded",
-        "resourceGroup": "abel-aks",
-        "servicePrincipalProfile": {
-            "clientId": "2672c451-f5d7-4ec0-85da-6aa30960de12",
-            "secret": null
-        },
-        "tags": null,
-        "type": "Microsoft.ContainerService/ManagedClusters"
+            ],
+            "dnsPrefix": "rbcaks-rbcore-38ac45",
+            "enableRbac": true,
+            "fqdn": "rbcaks-rbcore-38ac45-66347681.hcp.japaneast.azmk8s.io",
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourcegroups/rbcore/providers/Microsoft.ContainerService/managedClusters/rbcaks",
+            "kubernetesVersion": "1.12.5",
+            "linuxProfile": {
+                "adminUsername": "azureuser",
+                "ssh": {
+                "publicKeys": [
+                    {
+                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC20Lv1HaPdSaFep05hjo1syhM/1XNIEYsbLi0bM5eOn/BGgZF+1TwMktynf6iERHowwgTGKFMbLDVc4mVpa3EoyyTtjPgcP8CENV8TxezQPqa+xljpgW8CsMmE3xCDWOHtqcRa6DW5pgiz+B/TfT4qUTFoRUWZzw1UfPvpwb59rQX6t7YoUtf4wjfttTDprYDpdABZqm1AYAPfjd2ZprUKxk7Hh8ZXM6mTBSvb+F47QIM+57dNME7/nBaT9TvJGCv8f2uCfArUQ4/FP12+v5C7YIoURGuJQmbUnduycqyGuji5SXcMsTlgXaDLk/Ti8qQxvPdlMPBxnV3c4dQdvGcJ fiware@FIWARE-PC\n"
+                    }
+                ]
+                }
+            },
+            "location": "japaneast",
+            "name": "rbcaks",
+            "networkProfile": {
+                "dnsServiceIp": "10.0.0.10",
+                "dockerBridgeCidr": "172.17.0.1/16",
+                "networkPlugin": "kubenet",
+                "networkPolicy": null,
+                "podCidr": "10.244.0.0/16",
+                "serviceCidr": "10.0.0.0/16"
+            },
+            "nodeResourceGroup": "MC_rbcore_rbcaks_japaneast",
+            "provisioningState": "Succeeded",
+            "resourceGroup": "rbcore",
+            "servicePrincipalProfile": {
+                "clientId": "2672c451-f5d7-4ec0-85da-6aa30960de12",
+                "secret": null
+            },
+            "tags": null,
+            "type": "Microsoft.ContainerService/ManagedClusters"
         }
         ```
 
@@ -569,10 +569,10 @@
                 "vnetSubnetId": null
               }
             ],
-            "dnsPrefix": "abelk8s-abel-aks-38ac45",
+            "dnsPrefix": "rbcaks-rbcore-38ac45",
             "enableRbac": true,
-            "fqdn": "abelk8s-abel-aks-38ac45-ed59dae0.hcp.japaneast.azmk8s.io",
-            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourcegroups/abel-aks/providers/Microsoft.ContainerService/managedClusters/abelk8s",
+            "fqdn": "rbcaks-rbcore-38ac45-ed59dae0.hcp.japaneast.azmk8s.io",
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourcegroups/rbcore/providers/Microsoft.ContainerService/managedClusters/rbcaks",
             "kubernetesVersion": "1.12.5",
             "linuxProfile": {
               "adminUsername": "azureuser",
@@ -585,7 +585,7 @@
               }
             },
             "location": "japaneast",
-            "name": "abelk8s",
+            "name": "rbcaks",
             "networkProfile": {
               "dnsServiceIp": "10.0.0.10",
               "dockerBridgeCidr": "172.17.0.1/16",
@@ -594,9 +594,9 @@
               "podCidr": "10.244.0.0/16",
               "serviceCidr": "10.0.0.0/16"
             },
-            "nodeResourceGroup": "MC_abel-aks_abelk8s_japaneast",
+            "nodeResourceGroup": "MC_rbcore_rbcaks_japaneast",
             "provisioningState": "Succeeded",
-            "resourceGroup": "abel-aks",
+            "resourceGroup": "rbcore",
             "servicePrincipalProfile": {
               "clientId": "2672c451-f5d7-4ec0-85da-6aa30960de12",
               "secret": null
@@ -618,7 +618,7 @@
     - 実行結果（例）
 
         ```
-        Merged "abelk8s" as current context in /home/fiware/.kube/config
+        Merged "rbcaks" as current context in /home/fiware/.kube/config
         ```
 
 1. クライアントのID取得
@@ -638,14 +638,14 @@
 
         ```
         {
-        "canDelegate": null,
-        "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-aks/providers/Microsoft.ContainerRegistry/registries/abelacr/providers/Microsoft.Authorization/roleAssignments/0ee39ef3-e228-4af1-b49d-fb856e01a8d3",
-        "name": "0ee39ef3-e228-4af1-b49d-fb856e01a8d3",
-        "principalId": "36685c79-71c5-4343-a755-4946251515bc",
-        "resourceGroup": "abel-aks",
-        "roleDefinitionId": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7",
-        "scope": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/abel-aks/providers/Microsoft.ContainerRegistry/registries/abelacr",
-        "type": "Microsoft.Authorization/roleAssignments"
+            "canDelegate": null,
+            "id": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/rbcore/providers/Microsoft.ContainerRegistry/registries/rbcacr/providers/Microsoft.Authorization/roleAssignments/0ee39ef3-e228-4af1-b49d-fb856e01a8d3",
+            "name": "0ee39ef3-e228-4af1-b49d-fb856e01a8d3",
+            "principalId": "36685c79-71c5-4343-a755-4946251515bc",
+            "resourceGroup": "rbcore",
+            "roleDefinitionId": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7",
+            "scope": "/subscriptions/38ac45e2-5c75-438f-9498-b1a854b2a535/resourceGroups/rbcore/providers/Microsoft.ContainerRegistry/registries/rbcacr",
+            "type": "Microsoft.Authorization/roleAssignments"
         }
         ```
 
@@ -667,7 +667,7 @@
 1. パッケージリストの更新
 
     ```
-    $ sudo apt-get -y update
+    $ sudo apt-get update -y
     ```
 
 1. kubectlのインストール
@@ -723,7 +723,7 @@
 1. RBAC用のリソース定義を確認
 
     ```
-    $ cd $PJ_ROOT/rbac
+    $ cd $CORE_ROOT/rbac
     $ ls -la 
     ```
 
